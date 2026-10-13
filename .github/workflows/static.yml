@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="tr" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yusuf Türüdü | Avionics & Embedded Developer</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: {
+                            bg: '#050b14',
+                            card: 'rgba(13, 22, 41, 0.65)',
+                            border: 'rgba(0, 243, 255, 0.2)',
+                            cyan: '#00f3ff',
+                            purple: '#9d4edd',
+                            blue: '#3a86ff',
+                            pink: '#ff007f'
+                        }
+                    },
+                    fontFamily: {
+                        mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
+                        sans: ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- FontAwesome & Google Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Custom CSS Styles -->
+    <style>
+        body {
+            background-color: #030712;
+            color: #e2e8f0;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Glassmorphism card utility */
+        .glass-panel {
+            background: rgba(10, 18, 36, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(0, 243, 255, 0.15);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .glass-panel:hover {
+            border-color: rgba(0, 243, 255, 0.4);
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
+        }
+
+        /* Neon Glow Effects */
+        .text-glow-cyan {
+            text-shadow: 0 0 10px rgba(0, 243, 255, 0.7), 0 0 20px rgba(0, 243, 255, 0.4);
+        }
+        
+        .text-glow-purple {
+            text-shadow: 0 0 10px rgba(157, 78, 221, 0.7), 0 0 20px rgba(157, 78, 221, 0.4);
+        }
+
+        .border-glow-cyan {
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
+        }
+
+        /* Grid Background Overlay */
+        .bg-grid-pattern {
+            background-size: 40px 40px;
+            background-image: 
+                linear-gradient(to right, rgba(0, 243, 255, 0.04) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0, 243, 255, 0.04) 1px, transparent 1px);
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #050b14;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #00f3ff22;
+            border-radius: 4px;
+            border: 1px solid rgba(0, 243, 255, 0.3);
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00f3ff66;
+        }
+
+        /* Dynamic Cursor Trail Canvas */
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body class="bg-grid-pattern relative min-h-screen">
+
+    <!-- Interactive Particle Background Canvas -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- Navigation Bar -->
+    <nav class="fixed top-0 left-0 w-full z-50 glass-panel border-b border-cyan-500/20 px-6 py-4">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <a href="#" class="flex items-center gap-3 group">
+                <div class="w-10 h-10 rounded-lg bg-cyan-500/10 border border-cyan-400/40 flex items-center justify-center group-hover:border-cyan-400 group-hover:shadow-[0_0_15px_rgba(0,243,255,0.5)] transition-all">
+                    <i class="fa-solid fa-microchip text-cyan-400 text-lg"></i>
+                </div>
+                <div class="flex flex-col">
+                    <span class="font-bold tracking-wider text-white text-lg group-hover:text-cyan-400 transition-colors">YUSUF TÜRÜDÜ</span>
+                    <span class="text-xs text-cyan-400/70 font-mono tracking-widest">LaStJaNiSSaRy</span>
+                </div>
+            </a>
+
+            <div class="hidden md:flex gap-8 font-mono text-sm">
+                <a href="#about" class="text-gray-300 hover:text-cyan-400 transition-colors flex items-center gap-2"><span class="text-cyan-400">01.</span> Hakkımda</a>
+                <a href="#skills" class="text-gray-300 hover:text-cyan-400 transition-colors flex items-center gap-2"><span class="text-cyan-400">02.</span> Teknolojiler</a>
+                <a href="#projects" class="text-gray-300 hover:text-cyan-400 transition-colors flex items-center gap-2"><span class="text-cyan-400">03.</span> Projeler</a>
+                <a href="#achievements" class="text-gray-300 hover:text-cyan-400 transition-colors flex items-center gap-2"><span class="text-cyan-400">04.</span> Dereceler</a>
+                <a href="#terminal" class="text-gray-300 hover:text-cyan-400 transition-colors flex items-center gap-2"><span class="text-cyan-400">05.</span> Terminal</a>
+            </div>
+
+            <a href="https://github.com/LaStJaNiSSaRy" target="_blank" class="px-4 py-2 rounded-lg bg-cyan-500/10 border border-cyan-400/40 hover:bg-cyan-400/20 text-cyan-400 font-mono text-xs flex items-center gap-2 hover:border-cyan-400 transition-all">
+                <i class="fa-brands fa-github text-sm"></i>
+                <span>GitHub Profil</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative pt-36 pb-20 px-6 max-w-7xl mx-auto z-10 flex flex-col md:flex-row items-center justify-between gap-12 min-h-screen">
+        <div class="flex-1 space-y-6">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-400/30 text-cyan-400 font-mono text-xs tracking-wide">
+                <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
+                Sistemler Çevrimiçi & Geliştirmeye Açık
+            </div>
+
+            <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight text-white leading-tight">
+                Merhaba, Ben <br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 text-glow-cyan">Yusuf Türüdü</span>
+            </h1>
+
+            <div class="h-10 text-xl sm:text-2xl font-mono text-gray-300 flex items-center gap-2">
+                <span class="text-cyan-400">&gt;</span>
+                <span id="typing-text" class="border-r-2 border-cyan-400 pr-1"></span>
+            </div>
+
+            <p class="text-gray-400 text-base sm:text-lg max-w-xl leading-relaxed">
+                Lise öğrencisi, aviyonik sistem meraklısı, otonom İHA geliştiricisi ve 3D tasarımcı. Donanım ve yazılımın kesiştiği gömülü sistemler dünyasında geleceği inşa ediyorum.
+            </p>
+
+            <div class="flex flex-wrap gap-4 pt-4">
+                <a href="#projects" class="px-6 py-3 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 text-slate-950 font-bold hover:shadow-[0_0_25px_rgba(0,243,255,0.6)] transition-all flex items-center gap-2">
+                    <i class="fa-solid fa-rocket"></i>
+                    <span>Projeleri İncele</span>
+                </a>
+                <a href="#terminal" class="px-6 py-3 rounded-lg glass-panel text-cyan-400 font-mono border border-cyan-400/40 hover:border-cyan-400 hover:bg-cyan-500/10 transition-all flex items-center gap-2">
+                    <i class="fa-solid fa-terminal"></i>
+                    <span>CLI Terminalini Çalıştır</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Cyber Avatar Placeholder -->
+        <div class="relative group">
+            <div class="absolute -inset-1 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-2xl blur-lg opacity-70 group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-pulse"></div>
+            <div class="relative w-72 h-72 sm:w-80 sm:h-80 glass-panel rounded-2xl p-6 flex flex-col items-center justify-center text-center gap-4 overflow-hidden border border-cyan-400/30">
+                <div class="w-32 h-32 rounded-full border-2 border-cyan-400 flex items-center justify-center relative shadow-[0_0_30px_rgba(0,243,255,0.3)]">
+                    <i class="fa-solid fa-drone-front text-6xl text-cyan-400"></i>
+                    <div class="absolute inset-0 rounded-full border border-dashed border-cyan-400/50 animate-spin" style="animation-duration: 12s;"></div>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold text-white tracking-wide">LaStJaNiSSaRy</h3>
+                    <p class="text-xs text-cyan-400 font-mono mt-1">Avionics & Embedded Systems</p>
+                </div>
+                <div class="flex gap-4 text-gray-400 text-lg pt-2">
+                    <a href="https://github.com/LaStJaNiSSaRy" target="_blank" class="hover:text-cyan-400 transition-colors"><i class="fa-brands fa-github"></i></a>
+                    <a href="#" class="hover:text-cyan-400 transition-colors"><i class="fa-solid fa-paper-plane"></i></a>
+                    <a href="#" class="hover:text-cyan-400 transition-colors"><i class="fa-brands fa-discord"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 px-6 max-w-7xl mx-auto z-10 relative">
+        <div class="flex items-center gap-4 mb-12">
+            <h2 class="text-3xl font-extrabold text-white tracking-tight flex items-center gap-3">
+                <span class="text-cyan-400 font-mono text-xl">01.</span> Hakkımda
+            </h2>
+            <div class="h-[1px] bg-cyan-500/20 flex-1"></div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="glass-panel p-6 rounded-xl space-y-4 md:col-span-2">
+                <p class="text-gray-300 leading-relaxed">
+                    Merhaba! Ben <strong class="text-cyan-400">Yusuf Türüdü</strong>. Teknolojiyi sadece tüketmekle kalmayıp, kendi uçuş kontrol kartlarımı, otonom sistemlerimi ve 3D tasarımlarımı sıfırdan üreten genç bir geliştiriciyim.
+                </p>
+                <p class="text-gray-300 leading-relaxed">
+                    İHA sistemleri, sensör füzyonu (IMU, Barometre, GPS), **ESP32 ile ESP-NOW** telemetri protokolleri ve donanım tarafında **EasyEDA Pro** ile özel PCB kart tasarımı üzerine yoğunlaşıyorum.
+                </p>
+                <p class="text-gray-300 leading-relaxed">
+                    Aynı zamanda **Blender & Rhino 3D** kullanarak aerodinamik gövdeler modelliyor ve **Unreal Engine** ortamında kendi tasarladığım İHA'ların uçuş simülasyon dinamiklerini geliştiriyorum.
+                </p>
+
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 pt-4 border-t border-cyan-500/10">
+                    <div>
+                        <span class="text-xs font-mono text-cyan-400 block">KONUM</span>
+                        <span class="text-sm font-semibold text-white">Ankara / Türkiye</span>
+                    </div>
+                    <div>
+                        <span class="text-xs font-mono text-cyan-400 block">ROL</span>
+                        <span class="text-sm font-semibold text-white">High School Dev / Maker</span>
+                    </div>
+                    <div>
+                        <span class="text-xs font-mono text-cyan-400 block">İLGİ ALANI</span>
+                        <span class="text-sm font-semibold text-white">Aviyonik & Otonom İHA</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Focus Highlights Card -->
+            <div class="glass-panel p-6 rounded-xl space-y-6 flex flex-col justify-between border-l-4 border-l-cyan-400">
+                <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-compass-drafting text-cyan-400"></i> Odak Alanlarım
+                </h3>
+                
+                <ul class="space-y-4 text-sm text-gray-300">
+                    <li class="flex items-start gap-3">
+                        <i class="fa-solid fa-microchip text-cyan-400 mt-1"></i>
+                        <span><strong>Gömülü Sistemler:</strong> ESP32, STM32, Pixhawk & Özel PCB Tasarımı</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <i class="fa-solid fa-plane text-cyan-400 mt-1"></i>
+                        <span><strong>Aviyonik:</strong> Telemetri, IMU İşleme & Otonom Uçuş Yazılımları</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <i class="fa-solid fa-cube text-cyan-400 mt-1"></i>
+                        <span><strong>3D & CAD:</strong> Blender, Rhino 3D & Parametrik Tasarım</span>
+                    </li>
+                </ul>
+
+                <div class="p-3 bg-cyan-500/10 rounded-lg border border-cyan-400/20 text-xs font-mono text-cyan-300">
+                    <i class="fa-solid fa-code-branch mr-1"></i> "Hardware is hard, but firmware makes it fly."
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills & Tech Stack Section -->
+    <section id="skills" class="py-20 px-6 max-w-7xl mx-auto z-10 relative">
+        <div class="flex items-center gap-4 mb-12">
+            <h2 class="text-3xl font-extrabold text-white tracking-tight flex items-center gap-3">
+                <span class="text-cyan-400 font-mono text-xl">02.</span> Teknolojiler & Beceriler
+            </h2>
+            <div class="h-[1px] bg-cyan-500/20 flex-1"></div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Hardware & Embedded -->
+            <div class="glass-panel p-6 rounded-xl space-y-4">
+                <div class="flex items-center gap-3 text-cyan-400 font-bold text-lg border-b border-cyan-500/20 pb-3">
+                    <i class="fa-solid fa-memory"></i> Gömülü Sistemler & Donanım
+                </div>
+                <div class="flex flex-wrap gap-2">
+                    <span class="px-3 py-1.5 rounded-md bg-cyan-950/60 border border-cyan-500/30 text-cyan-300 text-xs font-mono hover:border-cyan-400 hover:shadow-[0_0_10px_rgba(0,243,255,0.3)] transition-all">ESP32 & ESP-NOW</span>
+                    <span class="px-3 py-1.5 rounded-md bg-cyan-950/60 border border-cyan-500/30 text-cyan-300 text-xs font-mono hover:border-cyan-400 hover:shadow-[0_0_10px_rgba(0,243,255,0.3)] transition-all">EasyEDA Pro (PCB)</span>
+                    <span class="px-3 py-1.5 rounded-md bg-cyan-950/60 border border-cyan-500/30 text-cyan-300 text-xs font-mono hover:border-cyan-400 hover:shadow-[0_0_10px_rgba(0,243,255,0.3)] transition-all">Pixhawk / Mission Planner</span>
+                    <span class="px-3 py-1.5 rounded-md bg-cyan-950/60 border border-cyan-500/30 text-cyan-300 text-xs font-mono hover:border-cyan-400 hover:shadow-[0_0_10px_rgba(0,243,255,0.3)] transition-all">Arduino / C++</span>
+                    <span class="px-3 py-1.5 rounded-md bg-cyan-950/60 border border-cyan-500/30 text-cyan-300 text-xs font-mono hover:border-cyan-400 hover:shadow-[0_0_10px_rgba(0,243,255,0.3)] transition-all">IMU Sensor Processing</span>
+                    <span class="px-3 py-1.5 rounded-md bg-cyan-950/60 border border-cyan-500/30 text-cyan-300 text-xs font-mono hover:border-cyan-400 hover:shadow-[0_0_10px_rgba(0,243,255,0.3)] transition-all">PDB (Power Dist. Boards)</span>
+                </div>
+            </div>
+
+            <!-- Software & Simulation -->
+            <div class="glass-panel p-6 rounded-xl space-y-4">
+                <div class="flex items-center gap-3 text-purple-400 font-bold text-lg border-b border-purple-500/20 pb-3">
+                    <i class="fa-solid fa-code"></i> Yazılım & Simülasyon
+                </div>
+                <div class="flex flex-wrap gap-2">
+                    <span class="px-3 py-1.5 rounded-md bg-purple-950/60 border border-purple-500/30 text-purple-300 text-xs font-mono hover:border-purple-400 hover:shadow-[0_0_10px_rgba(157,78,221,0.3)] transition-all">C++</span>
+                    <span class="px-3 py-1.5 rounded-md bg-purple-950/60 border border-purple-500/30 text-purple-300 text-xs font-mono hover:border-purple-400 hover:shadow-[0_0_10px_rgba(157,78,221,0.3)] transition-all">Python</span>
+                    <span class="px-3 py-1.5 rounded-md bg-purple-950/60 border border-purple-500/30 text-purple-300 text-xs font-mono hover:border-purple-400 hover:shadow-[0_0_10px_rgba(157,78,221,0.3)] transition-all">Unreal Engine (Physics/Sim)</span>
+                    <span class="px-3 py-1.5 rounded-md bg-purple-950/60 border border-purple-500/30 text-purple-300 text-xs font-mono hover:border-purple-400 hover:shadow-[0_0_10px_rgba(157,78,221,0.3)] transition-all">HTML / Tailwind CSS</span>
+                    <span class="px-3 py-1.5 rounded-md bg-purple-950/60 border border-purple-500/30 text-purple-300 text-xs font-mono hover:border-purple-400 hover:shadow-[0_0_10px_rgba(157,78,221,0.3)] transition-all">Fabric / Minecraft Mods</span>
+                </div>
+            </div>
+
+            <!-- 3D & CAD Modeling -->
+            <div class="glass-panel p-6 rounded-xl space-y-4">
+                <div class="flex items-center gap-3 text-blue-400 font-bold text-lg border-b border-blue-500/20 pb-3">
+                    <i class="fa-solid fa-cubes"></i> 3D Tasarım & CAD
+                </div>
+                <div class="flex flex-wrap gap-2">
+                    <span class="px-3 py-1.5 rounded-md bg-blue-950/60 border border-blue-500/30 text-blue-300 text-xs font-mono hover:border-blue-400 hover:shadow-[0_0_10px_rgba(58,134,255,0.3)] transition-all">Blender 3D</span>
+                    <span class="px-3 py-1.5 rounded-md bg-blue-950/60 border border-blue-500/30 text-blue-300 text-xs font-mono hover:border-blue-400 hover:shadow-[0_0_10px_rgba(58,134,255,0.3)] transition-all">Rhino 3D</span>
+                    <span class="px-3 py-1.5 rounded-md bg-blue-950/60 border border-blue-500/30 text-blue-300 text-xs font-mono hover:border-blue-400 hover:shadow-[0_0_10px_rgba(58,134,255,0.3)] transition-all">Grasshopper</span>
+                    <span class="px-3 py-1.5 rounded-md bg-blue-950/60 border border-blue-500/30 text-blue-300 text-xs font-mono hover:border-blue-400 hover:shadow-[0_0_10px_rgba(58,134,255,0.3)] transition-all">Surface & Hard Ops Modeling</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="py-20 px-6 max-w-7xl mx-auto z-10 relative">
+        <div class="flex items-center gap-4 mb-8">
+            <h2 class="text-3xl font-extrabold text-white tracking-tight flex items-center gap-3">
+                <span class="text-cyan-400 font-mono text-xl">03.</span> Öne Çıkan Projeler
+            </h2>
+            <div class="h-[1px] bg-cyan-500/20 flex-1"></div>
+        </div>
+
+        <!-- Filter Buttons -->
+        <div class="flex flex-wrap gap-3 mb-10 font-mono text-sm">
+            <button class="project-filter-btn active px-4 py-2 rounded-lg bg-cyan-500 text-slate-950 font-bold transition-all" data-filter="all">Tümü</button>
+            <button class="project-filter-btn px-4 py-2 rounded-lg glass-panel text-gray-300 hover:text-cyan-400 transition-all" data-filter="hardware">Donanım & PCB</button>
+            <button class="project-filter-btn px-4 py-2 rounded-lg glass-panel text-gray-300 hover:text-cyan-400 transition-all" data-filter="software">Yazılım & Simülasyon</button>
+            <button class="project-filter-btn px-4 py-2 rounded-lg glass-panel text-gray-300 hover:text-cyan-400 transition-all" data-filter="3d">3D & CAD</button>
+        </div>
+
+        <!-- Projects Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8" id="projects-grid">
+            <!-- Project 1: MedAvengers Biosky -->
+            <div class="project-card glass-panel rounded-xl overflow-hidden border border-cyan-500/20 hover:border-cyan-400 transition-all group" data-category="hardware 3d">
+                <div class="h-48 bg-slate-900 relative flex items-center justify-center overflow-hidden border-b border-cyan-500/20">
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950 to-transparent z-10"></div>
+                    <i class="fa-solid fa-hospital text-7xl text-cyan-500/20 group-hover:text-cyan-400/40 group-hover:scale-110 transition-all duration-500"></i>
+                    <span class="absolute top-4 right-4 px-3 py-1 rounded-full bg-cyan-500/20 border border-cyan-400/40 text-cyan-300 font-mono text-xs z-20">TÜBİTAK 2204-A</span>
+                </div>
+                <div class="p-6 space-y-4">
+                    <h3 class="text-xl font-bold text-white group-hover:text-cyan-400 transition-colors">MedAvengers Biosky</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        Organ ve tıbbi doku nakli için tasarlanmış, iklim kontrollü ve otonom İHA konsepti. Soğuk zincir muhafazası ve hızlı acil ulaşım odaklı aviyonik mimari.
+                    </p>
+                    <div class="flex flex-wrap gap-2 pt-2">
+                        <span class="px-2 py-1 rounded bg-slate-800 text-cyan-400 font-mono text-xs">Otonom İHA</span>
+                        <span class="px-2 py-1 rounded bg-slate-800 text-cyan-400 font-mono text-xs">Medikal Kargo</span>
+                        <span class="px-2 py-1 rounded bg-slate-800 text-cyan-400 font-mono text-xs">EasyEDA</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project 2: Vecihi UAV & Flight Sim -->
+            <div class="project-card glass-panel rounded-xl overflow-hidden border border-cyan-500/20 hover:border-cyan-400 transition-all group" data-category="software 3d">
+                <div class="h-48 bg-slate-900 relative flex items-center justify-center overflow-hidden border-b border-cyan-500/20">
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950 to-transparent z-10"></div>
+                    <i class="fa-solid fa-plane-tail text-7xl text-purple-500/20 group-hover:text-purple-400/40 group-hover:scale-110 transition-all duration-500"></i>
+                    <span class="absolute top-4 right-4 px-3 py-1 rounded-full bg-purple-500/20 border border-purple-400/40 text-purple-300 font-mono text-xs z-20">Unreal Engine 5</span>
+                </div>
+                <div class="p-6 space-y-4">
+                    <h3 class="text-xl font-bold text-white group-hover:text-purple-400 transition-colors">Vecihi UAV 3D & Uçuş Simülasyonu</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        Blender/Rhino'da özgün olarak tasarlanmış gövde aerodinamiğinin Unreal Engine fizik motoruna aktarılarak sanal test uçuşlarının yapıldığı simülasyon projesi.
+                    </p>
+                    <div class="flex flex-wrap gap-2 pt-2">
+                        <span class="px-2 py-1 rounded bg-slate-800 text-purple-400 font-mono text-xs">Rhino 3D</span>
+                        <span class="px-2 py-1 rounded bg-slate-800 text-purple-400 font-mono text-xs">Unreal Engine</span>
+                        <span class="px-2 py-1 rounded bg-slate-800 text-purple-400 font-mono text-xs">Aerodinamik</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project 3: Custom ESP32 Flight Controller -->
+            <div class="project-card glass-panel rounded-xl overflow-hidden border border-cyan-500/20 hover:border-cyan-400 transition-all group" data-category="hardware software">
+                <div class="h-48 bg-slate-900 relative flex items-center justify-center overflow-hidden border-b border-cyan-500/20">
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950 to-transparent z-10"></div>
+                    <i class="fa-solid fa-microchip text-7xl text-blue-500/20 group-hover:text-blue-400/40 group-hover:scale-110 transition-all duration-500"></i>
+                    <span class="absolute top-4 right-4 px-3 py-1 rounded-full bg-blue-500/20 border border-blue-400/40 text-blue-300 font-mono text-xs z-20">ESP-NOW</span>
+                </div>
+                <div class="p-6 space-y-4">
+                    <h3 class="text-xl font-bold text-white group-hover:text-blue-400 transition-colors">Özel ESP32 Uçuş Kontrolcüsü & Telemetri</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        IMU sensör füzyonu, ESP-NOW yüksek hızlı kablosuz veri iletim protokolü ve yer kontrol istasyonuna canlı telemetri aktarımı sağlayan gömülü uçuş yazılımı.
+                    </p>
+                    <div class="flex flex-wrap gap-2 pt-2">
+                        <span class="px-2 py-1 rounded bg-slate-800 text-blue-400 font-mono text-xs">ESP32 C++</span>
+                        <span class="px-2 py-1 rounded bg-slate-800 text-blue-400 font-mono text-xs">IMU Sensör</span>
+                        <span class="px-2 py-1 rounded bg-slate-800 text-blue-400 font-mono text-xs">Telemetri</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project 4: Custom PCB Power Board -->
+            <div class="project-card glass-panel rounded-xl overflow-hidden border border-cyan-500/20 hover:border-cyan-400 transition-all group" data-category="hardware">
+                <div class="h-48 bg-slate-900 relative flex items-center justify-center overflow-hidden border-b border-cyan-500/20">
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950 to-transparent z-10"></div>
+                    <i class="fa-solid fa-bolt text-7xl text-amber-500/20 group-hover:text-amber-400/40 group-hover:scale-110 transition-all duration-500"></i>
+                    <span class="absolute top-4 right-4 px-3 py-1 rounded-full bg-amber-500/20 border border-amber-400/40 text-amber-300 font-mono text-xs z-20">EasyEDA Pro</span>
+                </div>
+                <div class="p-6 space-y-4">
+                    <h3 class="text-xl font-bold text-white group-hover:text-amber-400 transition-colors">Özel PDB (Güç Dağıtım Kartı)</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        Yüksek akım korumalı, voltaj regülatörlü ve entegre akım/gerilim sensörlü aviyonik güç dağıtım PCB tasarımı. EasyEDA Pro ortamında tasarlanmıştır.
+                    </p>
+                    <div class="flex flex-wrap gap-2 pt-2">
+                        <span class="px-2 py-1 rounded bg-slate-800 text-amber-400 font-mono text-xs">PCB Design</span>
+                        <span class="px-2 py-1 rounded bg-slate-800 text-amber-400 font-mono text-xs">Power Electronics</span>
+                        <span class="px-2 py-1 rounded bg-slate-800 text-amber-400 font-mono text-xs">EasyEDA</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Achievements / Milestones Section -->
+    <section id="achievements" class="py-20 px-6 max-w-7xl mx-auto z-10 relative">
+        <div class="flex items-center gap-4 mb-12">
+            <h2 class="text-3xl font-extrabold text-white tracking-tight flex items-center gap-3">
+                <span class="text-cyan-400 font-mono text-xl">04.</span> Başarılar & Dereceler
+            </h2>
+            <div class="h-[1px] bg-cyan-500/20 flex-1"></div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="glass-panel p-6 rounded-xl border-l-4 border-l-amber-400 space-y-3 relative overflow-hidden">
+                <i class="fa-solid fa-trophy text-4xl text-amber-400/30 absolute right-4 bottom-4"></i>
+                <span class="text-xs font-mono text-amber-400 uppercase tracking-wider">Ulusal Başarı</span>
+                <h3 class="text-xl font-bold text-white">TÜBİTAK 2204-A</h3>
+                <p class="text-cyan-400 font-bold text-sm">Türkiye 2.'liği 🥈</p>
+                <p class="text-gray-400 text-xs leading-relaxed">
+                    Kutup Araştırma Projeleri / MedAvengers Biosky medikal otonom hava aracı projesi ile derece.
+                </p>
+            </div>
+
+            <div class="glass-panel p-6 rounded-xl border-l-4 border-l-cyan-400 space-y-3 relative overflow-hidden">
+                <i class="fa-solid fa-award text-4xl text-cyan-400/30 absolute right-4 bottom-4"></i>
+                <span class="text-xs font-mono text-cyan-400 uppercase tracking-wider">Yarışma Derecesi</span>
+                <h3 class="text-xl font-bold text-white">Level-Up Hackathon</h3>
+                <p class="text-cyan-400 font-bold text-sm">3.'lük Derecesi 🥉</p>
+                <p class="text-gray-400 text-xs leading-relaxed">
+                    Hızlı prototipleme ve yenilikçi donanım/yazılım çözümleri odaklı kodlama yarışması.
+                </p>
+            </div>
+
+            <div class="glass-panel p-6 rounded-xl border-l-4 border-l-purple-400 space-y-3 relative overflow-hidden">
+                <i class="fa-solid fa-robot text-4xl text-purple-400/30 absolute right-4 bottom-4"></i>
+                <span class="text-xs font-mono text-purple-400 uppercase tracking-wider">Robotik</span>
+                <h3 class="text-xl font-bold text-white">TEKNOFEST Robolig</h3>
+                <p class="text-purple-400 font-bold text-sm">Robotik Yarışmacısı 🤖</p>
+                <p class="text-gray-400 text-xs leading-relaxed">
+                    Otonom robotik sistemler ve çizgi izleyen/görev odaklı robot tasarımları.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Terminal Widget -->
+    <section id="terminal" class="py-20 px-6 max-w-5xl mx-auto z-10 relative">
+        <div class="flex items-center gap-4 mb-8">
+            <h2 class="text-3xl font-extrabold text-white tracking-tight flex items-center gap-3">
+                <span class="text-cyan-400 font-mono text-xl">05.</span> Etkileşimli CLI Terminal
+            </h2>
+            <div class="h-[1px] bg-cyan-500/20 flex-1"></div>
+        </div>
+
+        <div class="glass-panel rounded-xl overflow-hidden border border-cyan-500/30 shadow-[0_0_30px_rgba(0,0,0,0.8)] font-mono text-sm">
+            <!-- Terminal Header -->
+            <div class="bg-slate-900/90 px-4 py-3 border-b border-cyan-500/20 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <span class="w-3 h-3 rounded-full bg-red-500/80 inline-block"></span>
+                    <span class="w-3 h-3 rounded-full bg-yellow-500/80 inline-block"></span>
+                    <span class="w-3 h-3 rounded-full bg-green-500/80 inline-block"></span>
+                    <span class="text-xs text-gray-400 ml-2">lastjanissary@avionics-os:~</span>
+                </div>
+                <div class="text-xs text-cyan-400/60">v2.0.4-release</div>
+            </div>
+
+            <!-- Terminal Output Area -->
+            <div id="terminal-body" class="p-4 h-64 overflow-y-auto space-y-2 text-gray-300">
+                <div class="text-cyan-400">Yusuf Turudu CLI Shell [Version 2.0]</div>
+                <div class="text-gray-400 text-xs">Kullanılabilir komutları görmek için <span class="text-yellow-400">'help'</span> yazın.</div>
+            </div>
+
+            <!-- Terminal Input -->
+            <div class="px-4 py-3 bg-slate-950/80 border-t border-cyan-500/20 flex items-center gap-2">
+                <span class="text-cyan-400 font-bold">&gt;</span>
+                <input type="text" id="terminal-input" class="bg-transparent border-none outline-none text-white w-full font-mono text-sm" placeholder="komut yazın..." autocomplete="off">
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer / Contact Section -->
+    <footer class="border-t border-cyan-500/20 py-12 px-6 glass-panel mt-20 relative z-10">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="space-y-1 text-center md:text-left">
+                <div class="text-lg font-bold text-white tracking-wider">YUSUF TÜRÜDÜ</div>
+                <div class="text-xs text-gray-400 font-mono">© 2026 LaStJaNiSSaRy. Tüm Hakları Saklıdır.</div>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <a href="https://github.com/LaStJaNiSSaRy" target="_blank" class="w-10 h-10 rounded-lg bg-cyan-500/10 border border-cyan-400/30 flex items-center justify-center text-cyan-400 hover:bg-cyan-400 hover:text-slate-950 transition-all">
+                    <i class="fa-brands fa-github text-lg"></i>
+                </a>
+                <button onclick="copyContactEmail()" class="px-4 py-2 rounded-lg bg-cyan-500/10 border border-cyan-400/30 text-cyan-400 text-xs font-mono flex items-center gap-2 hover:bg-cyan-400 hover:text-slate-950 transition-all">
+                    <i class="fa-solid fa-copy"></i>
+                    <span id="email-btn-text">E-postayı Kopyala</span>
+                </button>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // --- 1. Dynamic Typing Effect ---
+        const typingText = document.getElementById('typing-text');
+        const phrases = [
+            "Avionics & Embedded Dev",
+            "High School Maker & Dev",
+            "3D Modeler & CAD Designer",
+            "TÜBİTAK 2204-A Award Winner"
+        ];
+        let phraseIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+
+        function typeLoop() {
+            const currentPhrase = phrases[phraseIndex];
+            
+            if (isDeleting) {
+                typingText.textContent = currentPhrase.substring(0, charIndex - 1);
+                charIndex--;
+            } else {
+                typingText.textContent = currentPhrase.substring(0, charIndex + 1);
+                charIndex++;
+            }
+
+            let typeSpeed = isDeleting ? 40 : 80;
+
+            if (!isDeleting && charIndex === currentPhrase.length) {
+                typeSpeed = 2000;
+                isDeleting = true;
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                phraseIndex = (phraseIndex + 1) % phrases.length;
+                typeSpeed = 500;
+            }
+
+            setTimeout(typeLoop, typeSpeed);
+        }
+        typeLoop();
+
+        // --- 2. Interactive Terminal Engine ---
+        const termInput = document.getElementById('terminal-input');
+        const termBody = document.getElementById('terminal-body');
+
+        const commands = {
+            'help': 'Kullanılabilir Komutlar: <br>- <span class="text-cyan-400">whoami</span>: Kim olduğumu gör<br>- <span class="text-cyan-400">skills</span>: Yetenek listesi<br>- <span class="text-cyan-400">projects</span>: Projelerim<br>- <span class="text-cyan-400">contact</span>: İletişim bilgileri<br>- <span class="text-cyan-400">clear</span>: Ekranı temizle',
+            'whoami': 'Yusuf Türüdü (LaStJaNiSSaRy) | İHA, Aviyonik ve Gömülü Sistemler Geliştiricisi.',
+            'skills': 'Embedded: ESP32, EasyEDA, Pixhawk<br>3D: Blender, Rhino 3D<br>Software: C++, Python, Unreal Engine',
+            'projects': '1. MedAvengers Biosky (TÜBİTAK 2204-A 2.)<br>2. Vecihi İHA 3D & Simülasyon<br>3. ESP32 Özel Uçuş Kontrol Kartı',
+            'contact': 'GitHub: github.com/LaStJaNiSSaRy | Discord: LaStJaNiSSaRy',
+            'clear': ''
+        };
+
+        termInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                const inputVal = this.value.trim().toLowerCase();
+                this.value = '';
+
+                if (inputVal === '') return;
+
+                // Echo command
+                const echoLine = document.createElement('div');
+                echoLine.innerHTML = `<span class="text-cyan-400">&gt; ${inputVal}</span>`;
+                termBody.appendChild(echoLine);
+
+                if (inputVal === 'clear') {
+                    termBody.innerHTML = '';
+                    return;
+                }
+
+                const responseLine = document.createElement('div');
+                responseLine.className = 'text-gray-300 pl-4 border-l-2 border-cyan-500/40';
+
+                if (commands[inputVal]) {
+                    responseLine.innerHTML = commands[inputVal];
+                } else {
+                    responseLine.innerHTML = `<span class="text-red-400">Komut bulunamadı: '${inputVal}'. Yardım için 'help' yazın.</span>`;
+                }
+
+                termBody.appendChild(responseLine);
+                termBody.scrollTop = termBody.scrollHeight;
+            }
+        });
+
+        // --- 3. Projects Filter Logic ---
+        const filterBtns = document.querySelectorAll('.project-filter-btn');
+        const projectCards = document.querySelectorAll('.project-card');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => {
+                    b.classList.remove('bg-cyan-500', 'text-slate-950', 'font-bold');
+                    b.classList.add('glass-panel', 'text-gray-300');
+                });
+                btn.classList.remove('glass-panel', 'text-gray-300');
+                btn.classList.add('bg-cyan-500', 'text-slate-950', 'font-bold');
+
+                const filter = btn.getAttribute('data-filter');
+
+                projectCards.forEach(card => {
+                    if (filter === 'all' || card.getAttribute('data-category').includes(filter)) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // --- 4. Interactive Cursor Particle Canvas ---
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        window.addEventListener('mousemove', (e) => {
+            for (let i = 0; i < 2; i++) {
+                particles.push({
+                    x: e.clientX,
+                    y: e.clientY,
+                    size: Math.random() * 3 + 1,
+                    speedX: (Math.random() - 0.5) * 2,
+                    speedY: (Math.random() - 0.5) * 2,
+                    color: '#00f3ff',
+                    alpha: 1
+                });
+            }
+        });
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            for (let i = 0; i < particles.length; i++) {
+                let p = particles[i];
+                ctx.save();
+                ctx.globalAlpha = p.alpha;
+                ctx.fillStyle = p.color;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+
+                p.x += p.speedX;
+                p.y += p.speedY;
+                p.alpha -= 0.02;
+
+                if (p.alpha <= 0) {
+                    particles.splice(i, 1);
+                    i--;
+                }
+            }
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        // --- 5. Clipboard Helper ---
+        function copyContactEmail() {
+            const email = "yusufturudu@example.com"; // Buraya kendi e-postanı yazabilirsin
+            const textarea = document.createElement('textarea');
+            textarea.value = email;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+
+            const btnText = document.getElementById('email-btn-text');
+            btnText.textContent = 'Kopyalandı!';
+            setTimeout(() => {
+                btnText.textContent = 'E-postayı Kopyala';
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
